@@ -14,11 +14,18 @@ type Exercise = {
     seriesCount: string;
 };
 
+
 const WorkoutInProgress = ({ route, navigation }: { route: any, navigation: any }) => {
     const { session } = route.params;
     const [exercises, setExercises] = useState<Exercise[]>([]);
     const [viewWidth, setViewWidth] = useState<number>(0);
     const [workoutData, setWorkoutData] = useState<any[]>([]);
+
+    const fieldsConfig = [
+        { key: "reps", type: "number" },
+        { key: "feeling", type: "text" },
+        { key: "note", type: "text" }
+    ];
 
     const percentages = [0.5, 0.13, 0.13, 0.14];  // 40%, 10%, 50%
     const widthArr = viewWidth ? percentages.map(percentage => viewWidth * percentage) : [];
@@ -38,20 +45,17 @@ const WorkoutInProgress = ({ route, navigation }: { route: any, navigation: any 
         return `${min} minutes ${sec} secondes`;
     };
 
-    const handleRepsChange = (exerciseIndex: number, seriesIndex: number, reps: number) => {
+    const updateData = (exerciseIndex: number, seriesIndex: number, field: string, value: any) => {
         const updatedWorkoutData = [...workoutData];
-        const currentExerciseName = exercises[exerciseIndex].name; // Supposons que "exercises" est votre tableau d'exercices
-
         if (!updatedWorkoutData[exerciseIndex]) {
-            updatedWorkoutData[exerciseIndex] = { name: currentExerciseName, series: [] };
+            updatedWorkoutData[exerciseIndex] = { name: exercises[exerciseIndex].name, series: [] };
         }
         if (!updatedWorkoutData[exerciseIndex].series[seriesIndex]) {
             updatedWorkoutData[exerciseIndex].series[seriesIndex] = { reps: 0, feeling: "", note: "" };
         }
-        updatedWorkoutData[exerciseIndex].series[seriesIndex].reps = reps;
-        setWorkoutData(updatedWorkoutData);
+        updatedWorkoutData[exerciseIndex].series[seriesIndex][field] = value;
+        return updatedWorkoutData;
     };
-
 
     const saveCompletedWorkout = async (workoutData: any) => {
         try {
@@ -99,14 +103,18 @@ const WorkoutInProgress = ({ route, navigation }: { route: any, navigation: any 
                                         { textAlign: 'left' }
                                     ]}
                                 />
-                                {["Reps", "Ressenti", "Note"].map((inputLabel, inputIndex) => (
+                                {fieldsConfig.map((fieldConfig, inputIndex) => (
                                     <Cell
-                                        key={inputLabel}
+                                        key={fieldConfig.key}
                                         data={
                                             <TextInput
                                                 style={styles.input}
                                                 placeholderTextColor={"white"}
-                                                onChangeText={(text) => handleRepsChange(inputIndex, serieIndex, parseInt(text))}
+                                                keyboardType={fieldConfig.type === "number" ? "numeric" : "default"}
+                                                onChangeText={(text) => {
+                                                    const newData = updateData(i, serieIndex, fieldConfig.key, text);
+                                                    setWorkoutData(newData);
+                                                }}
                                             ></TextInput>
                                         }
                                         width={widthArr[inputIndex + 1]}
@@ -114,6 +122,7 @@ const WorkoutInProgress = ({ route, navigation }: { route: any, navigation: any 
                                 ))}
                             </View>
                         ))}
+
                     </View>
                 ))}
 

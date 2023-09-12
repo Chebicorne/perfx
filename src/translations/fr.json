@@ -1,0 +1,14 @@
+{
+    "signUp": {
+        "passwordsDoNotMatch": "Les mots de passe ne correspondent pas",
+        "email": "Adresse email",
+        "password": "Mot de passe",
+        "confirmPassword": "Confirmer le mot de passe",
+        "signUp": "S'inscrire"
+    },
+    "login": {
+        "email": "Adresse email",
+        "password": "Mot de passe",
+        "login": "Se connecter"
+    }
+}

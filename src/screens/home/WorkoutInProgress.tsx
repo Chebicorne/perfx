@@ -6,6 +6,8 @@ import { Cell, TableWrapper } from "react-native-table-component";
 import { auth, db } from '../../firebase/firebaseconfig';
 import { collection, addDoc } from "firebase/firestore";
 import { getData, storeData } from "../../utils/storageHelper";
+import GradientButton from "../../components/global/GradientButton";
+import LoadingScreen from "../global/LoadingScreen";
 
 type Exercise = {
     name: string;
@@ -20,8 +22,8 @@ const WorkoutInProgress = ({ route, navigation }: { route: any, navigation: any 
     const { session } = route.params;
     const [exercises, setExercises] = useState<Exercise[]>([]);
     const [viewWidth, setViewWidth] = useState<number>(0);
-    const [workoutData, setWorkoutData] = useState<any[]>([]);
-
+    const [workoutData, setWorkoutData] = useState<any[]>(exercises.map(exo => ({ name: exo.name, series: Array.from({ length: Number(exo.seriesCount) }).map(() => ({ reps: 0, feeling: "", note: "" })) })));
+    const [loading, setLoading] = useState<boolean>(false)
     const fieldsConfig = [
         { key: "reps", type: "number" },
         { key: "feeling", type: "text" },
@@ -60,81 +62,92 @@ const WorkoutInProgress = ({ route, navigation }: { route: any, navigation: any 
 
     const saveCompletedWorkout = async (workoutData: any) => {
         try {
-            console.log(workoutData);
-
+            setLoading(true)
             const docRef = await addDoc(collection(db, "doneWorkouts"), {
                 ...workoutData,
                 userId: userId
             });
             const storedWorkouts = await getData('completedWorkouts') || [];
             console.log(storedWorkouts);
-            
+
             storedWorkouts.push(workoutData);
             storeData('completedWorkouts', storedWorkouts);
-            console.log("Workout saved successfully with ID: ", docRef.id);
+            const emptyData = exercises.map(exo => ({ name: exo.name, series: Array.from({ length: Number(exo.seriesCount) }).map(() => ({ reps: 0, feeling: "", note: "" })) }));
+            setWorkoutData(emptyData);
+            setLoading(false)
+            navigation.replace("HomePage")
         } catch (error) {
             console.error("Error saving workout: ", error);
         }
     };
 
     return (
-        <SafeAreaView style={styles.container}>
-            <Swiper>
-                {exercises && exercises.map((exo, i) => (
-                    <View style={styles.swipeView} key={i}>
-                        <CustomText style={styles.title}>{exo.name}</CustomText>
-                        <CustomText style={styles.description}>{exo.placement}</CustomText>
-                        <CustomText style={styles.rest}>{secondsToMinutes(Number(exo.restTime))}</CustomText>
+        <>
+            {!loading ?
+                <SafeAreaView style={styles.container}>
+                    <Swiper>
+                        {exercises && exercises.map((exo, i) => (
+                            <View style={styles.swipeView} key={i}>
+                                <CustomText style={styles.title}>{exo.name}</CustomText>
+                                <CustomText style={styles.description}>{exo.placement}</CustomText>
+                                <CustomText style={styles.rest}>{secondsToMinutes(Number(exo.restTime))}</CustomText>
 
-                        <View style={styles.row}>
-                            {tableHead.map((headerItem: any, index: any) => (
-                                <Cell
-                                    key={index}
-                                    data={headerItem}
-                                    width={widthArr[index]}
-                                    textStyle={[
-                                        styles.tableText,
-                                        index === 0 ? { textAlign: 'left' } : { textAlign: 'center' }
-                                    ]}
-                                />
-                            ))}
-                        </View>
-                        {exo.seriesCount && Array.from({ length: Number(exo.seriesCount) }).map((_, serieIndex) => (
-                            <View key={serieIndex} style={styles.row}>
-                                <Cell
-                                    data={`Série ${serieIndex + 1}`}
-                                    width={widthArr[0]}
-                                    textStyle={[
-                                        styles.tableText,
-                                        { textAlign: 'left' }
-                                    ]}
-                                />
-                                {fieldsConfig.map((fieldConfig, inputIndex) => (
-                                    <Cell
-                                        key={fieldConfig.key}
-                                        data={
-                                            <TextInput
-                                                style={styles.input}
-                                                placeholderTextColor={"white"}
-                                                keyboardType={fieldConfig.type === "number" ? "numeric" : "default"}
-                                                onChangeText={(text) => {
-                                                    const newData = updateData(i, serieIndex, fieldConfig.key, text);
-                                                    setWorkoutData(newData);
-                                                }}
-                                            ></TextInput>
-                                        }
-                                        width={widthArr[inputIndex + 1]}
-                                    />
+                                <View style={styles.row}>
+                                    {tableHead.map((headerItem: any, index: any) => (
+                                        <Cell
+                                            key={index}
+                                            data={headerItem}
+                                            width={widthArr[index]}
+                                            textStyle={[
+                                                styles.tableText,
+                                                index === 0 ? { textAlign: 'left' } : { textAlign: 'center' }
+                                            ]}
+                                        />
+                                    ))}
+                                </View>
+                                {exo.seriesCount && Array.from({ length: Number(exo.seriesCount) }).map((_, serieIndex) => (
+                                    <View key={serieIndex} style={styles.row}>
+                                        <Cell
+                                            data={`Série ${serieIndex + 1}`}
+                                            width={widthArr[0]}
+                                            textStyle={[
+                                                styles.tableText,
+                                                { textAlign: 'left' }
+                                            ]}
+                                        />
+                                        {fieldsConfig.map((fieldConfig, inputIndex) => (
+                                            <Cell
+                                                key={fieldConfig.key}
+                                                data={
+                                                    <TextInput
+                                                        style={styles.input}
+                                                        placeholderTextColor={"white"}
+                                                        keyboardType={fieldConfig.type === "number" ? "numeric" : "default"}
+                                                        onChangeText={(text) => {
+                                                            const newData = updateData(i, serieIndex, fieldConfig.key, text);
+                                                            setWorkoutData(newData);
+                                                        }}
+                                                    ></TextInput>
+                                                }
+                                                width={widthArr[inputIndex + 1]}
+                                            />
+                                        ))}
+                                    </View>
                                 ))}
+
                             </View>
                         ))}
 
-                    </View>
-                ))}
+                    </Swiper>
 
-            </Swiper>
-            <TouchableOpacity onPress={() => { saveCompletedWorkout(workoutData) }}><CustomText>Enregistrer</CustomText></TouchableOpacity >
-        </SafeAreaView >
+                    <GradientButton style={styles.button} onPress={() => { saveCompletedWorkout(workoutData) }} colors={['#E235DC', '#a6e',]}>
+                        <CustomText style={styles.buttonText}>Enregistrer</CustomText>
+                    </GradientButton >
+                </SafeAreaView >
+                :
+                <LoadingScreen />
+            }
+        </>
     )
 }
 
@@ -187,5 +200,13 @@ const styles = StyleSheet.create({
     rest: {
         fontSize: 18,
         textAlign: 'center',
-    }
+    },
+    button: {
+        borderRadius: 10,
+    },
+    buttonText: {
+        padding: 20,
+        textAlign: 'center',
+        fontSize: 20
+    },
 })

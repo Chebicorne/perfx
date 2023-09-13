@@ -3,6 +3,7 @@ import { SafeAreaView, StyleSheet, View, FlatList, TouchableOpacity, RefreshCont
 import CustomText from "../components/global/CustomText";
 import { db } from '../firebase/firebaseconfig'; // Assurez-vous que le chemin est correct
 import { collection, getDocs } from 'firebase/firestore';
+import { storeData, getData } from '../utils/storageHelper'; // Assurez-vous que le chemin est correct
 
 const HomePageScreen = ({ navigation }: any) => {
     const [sessions, setSessions] = useState<any[]>([]);
@@ -19,13 +20,23 @@ const HomePageScreen = ({ navigation }: any) => {
             }));
 
             setSessions(sessionsData);
+            storeData('sessions', sessionsData);
         } catch (error) {
             console.error("Erreur lors de la récupération des séances:", error);
         }
     };
 
     useEffect(() => {
-        fetchSessions();
+        const fetchSessionsFromStorage = async () => {
+            const storedSessions = await getData('sessions');
+            if (storedSessions) {
+                setSessions(storedSessions);
+            } else {
+                fetchSessions();
+            }
+        };
+
+        fetchSessionsFromStorage();
     }, []);
 
     const onRefresh = async () => {

@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { Cell, TableWrapper } from "react-native-table-component";
 import { auth, db } from '../../firebase/firebaseconfig';
 import { collection, addDoc } from "firebase/firestore";
+import { getData, storeData } from "../../utils/storageHelper";
 
 type Exercise = {
     name: string;
@@ -65,6 +66,11 @@ const WorkoutInProgress = ({ route, navigation }: { route: any, navigation: any 
                 ...workoutData,
                 userId: userId
             });
+            const storedWorkouts = await getData('completedWorkouts') || [];
+            console.log(storedWorkouts);
+            
+            storedWorkouts.push(workoutData);
+            storeData('completedWorkouts', storedWorkouts);
             console.log("Workout saved successfully with ID: ", docRef.id);
         } catch (error) {
             console.error("Error saving workout: ", error);

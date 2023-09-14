@@ -63,8 +63,13 @@ const WorkoutInProgress = ({ route, navigation }: { route: any, navigation: any 
     const saveCompletedWorkout = async (workoutData: any) => {
         try {
             setLoading(true)
+
+            const sessionName = session.name; // Assurez-vous que 'name' est la clé correcte dans l'objet session
+            const currentDate = new Date().toISOString()
             const docRef = await addDoc(collection(db, "doneWorkouts"), {
                 ...workoutData,
+                sessionName: sessionName, // Ajoutez le nom de la séance
+                date: currentDate, // Ajoutez la date actuelle
                 userId: userId
             });
             const storedWorkouts = await getData('completedWorkouts') || [];

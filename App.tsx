@@ -14,7 +14,7 @@ import HistoryScreen from './src/screens/HistoryScreen';
 import WorkoutsScreen from './src/screens/WorkoutsScreen';
 import AddWorkoutScreen from './src/screens/workouts/AddWorkoutScreen';
 import HomePageScreen from './src/screens/HomePageScreen';
-import ProfileScreen from './src/screens/ProfileScreen';
+import WorkoutViewScreen from './src/screens/workouts/WorkoutView';
 import ConfirmWorkoutScreen from './src/screens/home/ConfirmWorkoutScreen';
 import WorkoutInProgress from './src/screens/home/WorkoutInProgress';
 import { auth } from './src/firebase/firebaseconfig';
@@ -42,6 +42,14 @@ function HomeScreenStackNavigator() {
   );
 }
 
+function HistoryStackNavigator() {
+  return (
+    <HomeScreenStack.Navigator screenOptions={{ headerShown: false }}>
+      <HomeScreenStack.Screen name="HistoryMain" component={HistoryScreen} />
+      <HomeScreenStack.Screen name="WorkoutView" component={WorkoutViewScreen} />
+    </HomeScreenStack.Navigator>
+  );
+}
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
@@ -80,7 +88,7 @@ const App = () => {
                 iconName = focused ? 'barbell' : 'barbell-outline';
               } else if (route.name === 'Timer') {
                 iconName = focused ? 'timer' : 'timer-outline';
-              } else if (route.name === 'Profile') {
+              } else if (route.name === 'History') {
                 iconName = focused ? 'document-text' : 'document-text-outline';
               }
 
@@ -92,7 +100,7 @@ const App = () => {
           <AppTab.Screen name="Home" component={HomeScreenStackNavigator} />
           <AppTab.Screen name="Workouts" component={WorkoutsStackNavigator} />
           <AppTab.Screen name="Timer" component={WorkoutsScreen} />
-          <AppTab.Screen name="Profile" component={ProfileScreen} />
+          <AppTab.Screen name="History" component={HistoryStackNavigator} />
         </AppTab.Navigator>
 
       ) : (

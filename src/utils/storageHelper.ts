@@ -18,3 +18,11 @@ export const getData = async (key: string) => {
     return null;
   }
 };
+
+export const removeData = async (key: string): Promise<void> => {
+  try {
+    await AsyncStorage.removeItem(key);
+  } catch (error) {
+    console.error("Error removing data from AsyncStorage:", error);
+  }
+};

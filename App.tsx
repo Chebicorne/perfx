@@ -14,6 +14,7 @@ import HistoryScreen from './src/screens/HistoryScreen';
 import WorkoutsScreen from './src/screens/WorkoutsScreen';
 import AddWorkoutScreen from './src/screens/workouts/AddWorkoutScreen';
 import HomePageScreen from './src/screens/HomePageScreen';
+import TimerScreen from './src/screens/TimerScreen';
 import WorkoutViewScreen from './src/screens/workouts/WorkoutView';
 import ConfirmWorkoutScreen from './src/screens/home/ConfirmWorkoutScreen';
 import WorkoutInProgress from './src/screens/home/WorkoutInProgress';
@@ -99,7 +100,7 @@ const App = () => {
         >
           <AppTab.Screen name="Home" component={HomeScreenStackNavigator} />
           <AppTab.Screen name="Workouts" component={WorkoutsStackNavigator} />
-          <AppTab.Screen name="Timer" component={WorkoutsScreen} />
+          <AppTab.Screen name="Timer" component={TimerScreen} />
           <AppTab.Screen name="History" component={HistoryStackNavigator} />
         </AppTab.Navigator>
 

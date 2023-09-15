@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { collection, getDocs } from "@firebase/firestore";
 import { db } from '../firebase/firebaseconfig'
 
-const HistoryScreen = () => {
+const HistoryScreen = ({ navigation }: any) => {
     const [doneWorkouts, setDoneWorkouts] = useState<any[]>([]);
     const [refreshing, setRefreshing] = useState(false);
 
@@ -71,7 +71,8 @@ const HistoryScreen = () => {
                     const sessionName = item.sessionName
 
                     return (
-                        <TouchableOpacity style={styles.workoutButton} onPress={() => null}>
+                        <TouchableOpacity style={styles.workoutButton} onPress={() => navigation.navigate('WorkoutView', { workoutDetails: item })}
+                        >
                             <CustomText>{sessionName}</CustomText>
                             <CustomText>{formatDate(item.date)}</CustomText>
                         </TouchableOpacity>

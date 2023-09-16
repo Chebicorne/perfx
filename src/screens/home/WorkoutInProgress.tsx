@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { Cell, TableWrapper } from "react-native-table-component";
 import { auth, db } from '../../firebase/firebaseconfig';
 import { collection, addDoc } from "firebase/firestore";
-import { getData, removeData, storeData } from "../../utils/storageHelper";
+import { getData, storeData } from "../../utils/storageHelper";
 import GradientButton from "../../components/global/GradientButton";
 import LoadingScreen from "../global/LoadingScreen";
 
@@ -79,20 +79,12 @@ const WorkoutInProgress = ({ route, navigation }: { route: any, navigation: any 
             storeData('completedWorkouts', storedWorkouts);
             const emptyData = exercises.map(exo => ({ name: exo.name, series: Array.from({ length: Number(exo.seriesCount) }).map(() => ({ reps: 0, feeling: "", note: "" })) }));
             setWorkoutData(emptyData);
-            await removeData(`inProgress_${session.name}`);
             setLoading(false)
             navigation.replace("HomePage")
         } catch (error) {
             console.error("Error saving workout: ", error);
         }
     };
-
-    const handleChangingText = async (i: any, serieIndex: any, key: any, text: any) => {
-        const sessionName = session.name; // Assurez-vous que 'name' est la clé correcte dans l'objet session
-        const newData = updateData(i, serieIndex, key, text);
-        setWorkoutData(newData);
-        await storeData(`inProgress_${sessionName}`, workoutData);
-    }
 
     return (
         <>
@@ -137,7 +129,8 @@ const WorkoutInProgress = ({ route, navigation }: { route: any, navigation: any 
                                                         placeholderTextColor={"white"}
                                                         keyboardType={fieldConfig.type === "number" ? "numeric" : "default"}
                                                         onChangeText={(text) => {
-                                                            handleChangingText(i, serieIndex, fieldConfig.key, text)
+                                                            const newData = updateData(i, serieIndex, fieldConfig.key, text);
+                                                            setWorkoutData(newData);
                                                         }}
                                                     ></TextInput>
                                                 }

@@ -4,12 +4,10 @@ import CustomText from "../components/global/CustomText";
 import { db } from '../firebase/firebaseconfig'; // Assurez-vous que le chemin est correct
 import { collection, getDocs } from 'firebase/firestore';
 import { storeData, getData } from '../utils/storageHelper'; // Assurez-vous que le chemin est correct
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const HomePageScreen = ({ navigation }: any) => {
     const [sessions, setSessions] = useState<any[]>([]);
     const [refreshing, setRefreshing] = useState(false);
-    const [inProgressSessions, setInProgressSessions] = useState<any[]>([]);
 
     const fetchSessions = async () => {
         try {
@@ -27,24 +25,6 @@ const HomePageScreen = ({ navigation }: any) => {
             console.error("Erreur lors de la récupération des séances:", error);
         }
     };
-
-    useEffect(() => {
-        const fetchInProgressSessions = async () => {
-            const keys = await AsyncStorage.getAllKeys();
-            const inProgress = [];
-            for (const key of keys) {
-                if (key.startsWith("inProgress_")) {
-                    const session = await getData(key);
-                    inProgress.push(session);
-                }
-            }
-            console.log(inProgress);
-            
-            setInProgressSessions(inProgress);
-        };
-
-        fetchInProgressSessions();
-    }, []);
 
     useEffect(() => {
         const fetchSessionsFromStorage = async () => {
@@ -85,20 +65,6 @@ const HomePageScreen = ({ navigation }: any) => {
                         data={sessions}
                         renderItem={({ item }) => (
                             <TouchableOpacity onPress={() => navigation.navigate('ConfirmWorkout', { session: item })} style={styles.workoutButton}>
-                                <CustomText>{item.name}</CustomText>
-                            </TouchableOpacity>
-                        )}
-                        keyExtractor={item => item.id}
-                        horizontal={true}
-                    />
-                </View>
-                <View style={styles.workoutsContainer}>
-                    <CustomText style={styles.containerTitle}>Séances en cours :</CustomText>
-
-                    <FlatList
-                        data={inProgressSessions}
-                        renderItem={({ item }) => (
-                            <TouchableOpacity onPress={() => navigation.navigate('WorkoutInProgress', { session: item })} style={styles.workoutButton}>
                                 <CustomText>{item.name}</CustomText>
                             </TouchableOpacity>
                         )}

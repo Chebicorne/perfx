@@ -32,7 +32,8 @@ const HistoryScreen = ({ navigation }: any) => {
         setRefreshing(true)
         fetchDoneWorkouts()
         setRefreshing(false)
-        }
+        console.log(doneWorkouts);
+    }
 
     useEffect(() => {
         const fetchDoneWorkoutsFromStorage = async () => {
@@ -60,7 +61,7 @@ const HistoryScreen = ({ navigation }: any) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <CustomText style={styles.title}>Historique des séances</CustomText>
+            <CustomText style={styles.title}>Salut, Lenny</CustomText>
             <FlatList
                 refreshControl={
                     <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />

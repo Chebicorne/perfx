@@ -5,7 +5,6 @@ import GradientButton from '../../components/global/GradientButton';
 import { Table, Row, Rows, Cell, TableWrapper, Col } from 'react-native-table-component';
 import { Dimensions } from 'react-native';
 import BackNavigation from '../../components/global/BackNavigation';
-import { storeData } from '../../utils/storageHelper';
 const screenWidth = Dimensions.get('window').width;
 
 const ConfirmWorkoutScreen = ({ route, navigation }: { route: any, navigation: any }) => {
@@ -33,11 +32,6 @@ const ConfirmWorkoutScreen = ({ route, navigation }: { route: any, navigation: a
     return result;
   }
 
-  const handleConfirm = async () => {
-    await storeData(`inProgress_${session.name}`, session);
-    navigation.replace('WorkoutInProgress', { session });
-
-  }
   const percentages = [0.5, 0.13, 0.13, 0.14];  // 40%, 10%, 50%
   const widthArr = viewWidth ? percentages.map(percentage => viewWidth * percentage) : [];
 
@@ -91,7 +85,7 @@ const ConfirmWorkoutScreen = ({ route, navigation }: { route: any, navigation: a
           </Table>
         </View>
       </View >
-      <GradientButton style={styles.button} onPress={handleConfirm} colors={['#E235DC', '#a6e',]}>
+      <GradientButton style={styles.button} onPress={() => navigation.replace('WorkoutInProgress', { session })} colors={['#E235DC', '#a6e',]}>
         <CustomText style={styles.buttonText}>Démarrer</CustomText>
       </GradientButton>
       <BackNavigation navigation={navigation} />

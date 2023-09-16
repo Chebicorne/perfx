@@ -146,7 +146,7 @@ const WorkoutInProgress = ({ route, navigation }: { route: any, navigation: any 
                     </Swiper>
 
                     <GradientButton style={styles.button} onPress={() => { saveCompletedWorkout(workoutData) }} colors={['#E235DC', '#a6e',]}>
-                        <CustomText style={styles.buttonText}>Enregistrer</CustomText>
+                        <CustomText style={styles.buttonText}>Terminer la séance</CustomText>
                     </GradientButton >
                 </SafeAreaView >
                 :

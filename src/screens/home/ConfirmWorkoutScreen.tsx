@@ -5,6 +5,7 @@ import GradientButton from '../../components/global/GradientButton';
 import { Table, Row, Rows, Cell, TableWrapper, Col } from 'react-native-table-component';
 import { Dimensions } from 'react-native';
 import BackNavigation from '../../components/global/BackNavigation';
+import i18n from '../../utils/i18';
 const screenWidth = Dimensions.get('window').width;
 
 const ConfirmWorkoutScreen = ({ route, navigation }: { route: any, navigation: any }) => {
@@ -34,8 +35,7 @@ const ConfirmWorkoutScreen = ({ route, navigation }: { route: any, navigation: a
 
   const percentages = [0.5, 0.13, 0.13, 0.14];  // 40%, 10%, 50%
   const widthArr = viewWidth ? percentages.map(percentage => viewWidth * percentage) : [];
-
-  const tableHead = ['Exo', 'Séries', 'Reps', "Repos"];
+  const tableHead = [i18n.t('confirm.exercise'), i18n.t('confirm.sets'), i18n.t('confirm.reps'), i18n.t('confirm.rest')];
   const tableBody = exercisesToTable(session.exercises);
 
   return (
@@ -49,7 +49,7 @@ const ConfirmWorkoutScreen = ({ route, navigation }: { route: any, navigation: a
         <CustomText style={styles.description}>{session.description}</CustomText>
 
         <View>
-          <CustomText>Contenu de la séance :</CustomText>
+          <CustomText style={{marginBottom: 20}}>{i18n.t('confirm.workoutContent')} :</CustomText>
           <Table>
             <View style={styles.row}>
               {tableHead.map((headerItem, index) => (
@@ -86,7 +86,7 @@ const ConfirmWorkoutScreen = ({ route, navigation }: { route: any, navigation: a
         </View>
       </View >
       <GradientButton style={styles.button} onPress={() => navigation.replace('WorkoutInProgress', { session })} colors={['#E235DC', '#a6e',]}>
-        <CustomText style={styles.buttonText}>Démarrer</CustomText>
+        <CustomText style={styles.buttonText}>{i18n.t('confirm.start')}</CustomText>
       </GradientButton>
       <BackNavigation navigation={navigation} />
     </View >

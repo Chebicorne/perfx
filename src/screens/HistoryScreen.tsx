@@ -2,8 +2,9 @@ import { SafeAreaView, FlatList, View, StyleSheet, RefreshControl, TouchableOpac
 import CustomText from "../components/global/CustomText";
 import { getData, storeData } from "../utils/storageHelper";
 import { useEffect, useState } from "react";
-import { collection, getDocs } from "@firebase/firestore";
-import { db } from '../firebase/firebaseconfig'
+import { collection, getDocs, query, where } from "@firebase/firestore";
+import { auth, db } from '../firebase/firebaseconfig'
+import i18n from "../utils/i18";
 
 const HistoryScreen = ({ navigation }: any) => {
     const [doneWorkouts, setDoneWorkouts] = useState<any[]>([]);
@@ -11,18 +12,24 @@ const HistoryScreen = ({ navigation }: any) => {
 
     const fetchDoneWorkouts = async () => {
         try {
-            const workoutsRef = collection(db, 'doneWorkouts');
-
-            const workoutsSnapshot = await getDocs(workoutsRef);
-
-            const workoutsData = workoutsSnapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data()
-            }));
-
-            setDoneWorkouts(workoutsData);
-            storeData('doneWorkouts', workoutsData);
-
+            if (auth.currentUser) {
+                const currentUserId = auth.currentUser.uid; // Récupérez l'ID de l'utilisateur connecté
+    
+                const workoutsRef = collection(db, 'doneWorkouts');
+                
+                // Créez une requête pour filtrer les doneWorkouts en fonction de l'ID de l'utilisateur
+                const filteredQuery = query(workoutsRef, where("userId", "==", currentUserId));
+    
+                const workoutsSnapshot = await getDocs(filteredQuery);
+    
+                const workoutsData = workoutsSnapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+    
+                setDoneWorkouts(workoutsData);
+                storeData('doneWorkouts', workoutsData);
+            }
         } catch (error) {
             console.error("Erreur lors de la récupération des doneWorkouts:", error);
         }
@@ -61,12 +68,13 @@ const HistoryScreen = ({ navigation }: any) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <CustomText style={styles.title}>Salut, Lenny</CustomText>
+            <CustomText style={styles.title}>{i18n.t("workouts.history")}</CustomText>
             <FlatList
                 refreshControl={
                     <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
                 }
                 data={doneWorkouts}
+                keyExtractor={item => item.id}
                 renderItem={({ item }) => {
                     const sessionName = item.sessionName
 
@@ -78,7 +86,6 @@ const HistoryScreen = ({ navigation }: any) => {
                         </TouchableOpacity>
                     );
                 }}
-                keyExtractor={item => item.id}
             />
 
         </SafeAreaView>

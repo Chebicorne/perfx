@@ -1,14 +1,75 @@
 {
+    "landing": {
+        "welcomeMessage": "Bienvenue sur PerfX",
+        "desc": "L'app qui te permet de tracker tes performances en musculation",
+        "signup": "S'inscrire",
+        "connexion": "Se connecter"
+    },
     "signUp": {
         "passwordsDoNotMatch": "Les mots de passe ne correspondent pas",
         "email": "Adresse email",
         "password": "Mot de passe",
         "confirmPassword": "Confirmer le mot de passe",
-        "signUp": "S'inscrire"
+        "signUp": "S'inscrire",
+        "sign": "Inscription"
     },
     "login": {
         "email": "Adresse email",
         "password": "Mot de passe",
-        "login": "Se connecter"
+        "login": "Se connecter",
+        "connect": "Connexion",
+        "errorMessage": "Vérifiez vos informations de connexion"
+    },
+    "confirm": {
+        "workoutContent": "Contenu de la séance",
+        "exercise": "Exo",
+        "sets": "Séries",
+        "reps": "Reps",
+        "rest": "Repos",
+        "start": "Démarrer",
+        "note": "Note",
+        "feeling": "Ressenti"
+    },
+    "inprogress": {
+        "end": "Terminer la séance"
+    },
+    "workouts": {
+        "mine": "Mes séances",
+        "change": "Modifier une séance",
+        "add": "Ajouter une séance",
+        "name": "Nom de la séance",
+        "nameEx": "ex : Push",
+        "desc": "Description",
+        "descEx": "ex : Pour des pecs aussi gros que des tétés",
+        "exerciseName": "Exercice",
+        "exerciseEx": "ex : Développé couché",
+        "precise": "Précisions",
+        "preciseEx": "ex : Cran 8 sur la poulie",
+        "objReps": "Fourchette de reps",
+        "objRepsEx": "ex : 8-12",
+        "sets": "Séries",
+        "setsEx": "ex : 2",
+        "rest": "Repos",
+        "restEx": "120 (2min)",
+        "addExercice": "Ajouter exercise",
+        "save": "Enregistrer",
+        "addWorkout": "Ajouter une séance",
+        "errorFetching": "Aucune information sur la séance disponible.",
+        "history": "Historique"
+    },
+    "homepage": {
+        "welcome": "Salut beau gosse",
+        "todayWorkout": "On fait quoi aujourd'hui ?",
+        "progress": "Ma progression :",
+        "soon": "Prochainement.."
+    },
+    "profile": {
+        "disconnect": "Déconnexion"
+    },
+    "timer": {
+        "title": "Chronomètre",
+        "pause": "Pause",
+        "reset": "Reset",
+        "start": "Démarrer"
     }
 }

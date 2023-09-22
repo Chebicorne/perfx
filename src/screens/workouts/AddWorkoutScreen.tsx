@@ -7,6 +7,7 @@ import Label from '../../components/workouts/Label';
 import GradientButton from '../../components/global/GradientButton';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import NavigationBack from "../../components/global/BackNavigation"
+import i18n from '../../utils/i18';
 
 const AddWorkoutScreen: React.FC = ({ route, navigation }: any) => {
     const workoutData = route.params?.workoutData;
@@ -113,21 +114,21 @@ const AddWorkoutScreen: React.FC = ({ route, navigation }: any) => {
 
     return (
         <View style={styles.container}>
-            <CustomText style={styles.title}>{workoutData ? "Modifier une séance" : "Ajouter une séance"}</CustomText>
+            <CustomText style={styles.title}>{workoutData ? i18n.t('workouts.change') : i18n.t('workouts.add')}</CustomText>
             <ScrollView style={styles.viewContainer}>
-                <Label>Nom de la séance</Label>
+                <Label>{i18n.t('workouts.name')}</Label>
                 <TextInput
                     placeholderTextColor={"white"}
                     style={styles.input}
-                    placeholder="ex : Push"
+                    placeholder={i18n.t('workouts.nameEx')}
                     value={sessionName}
                     onChangeText={setSessionName}
                 />
-                <Label>Description</Label>
+                <Label>{i18n.t('workouts.desc')}</Label>
                 <TextInput
                     placeholderTextColor={"white"}
                     style={styles.input}
-                    placeholder="ex : Pour des pecs aussi gros que des tétés"
+                    placeholder={i18n.t('workouts.descEx')}
                     value={description}
                     onChangeText={setDescription}
                 />
@@ -151,44 +152,44 @@ const AddWorkoutScreen: React.FC = ({ route, navigation }: any) => {
 
                 {showExerciseForm && (
                     <View style={styles.exerciseForm}>
-                        <Label>Exercice</Label>
+                        <Label>{i18n.t('workouts.exerciseName')}</Label>
                         <TextInput
                             placeholderTextColor={"white"}
                             style={styles.input}
-                            placeholder="ex : Développé couché"
+                            placeholder={i18n.t('workouts.exerciseEx')}
                             value={currentExercise.name}
                             onChangeText={(text) => setCurrentExercise({ ...currentExercise, name: text })}
                         />
-                        <Label>Placement</Label>
+                        <Label>{i18n.t('workouts.precise')}</Label>
                         <TextInput
                             placeholderTextColor={"white"}
                             style={styles.input}
-                            placeholder="ex : Cran 8 sur la poulie"
+                            placeholder={i18n.t('workouts.preciseEx')}
                             value={currentExercise.placement}
                             onChangeText={(text) => setCurrentExercise({ ...currentExercise, placement: text })}
                         />
-                        <Label>Fourchette de reps</Label>
+                        <Label>{i18n.t('workouts.objReps')}</Label>
                         <TextInput
                             placeholderTextColor={"white"}
                             style={styles.input}
-                            placeholder="ex : 8-12"
+                            placeholder={i18n.t('workouts.objRepsEx')}
                             value={currentExercise.repetitionRange}
                             onChangeText={(text) => setCurrentExercise({ ...currentExercise, repetitionRange: text })}
                         />
-                        <Label>Nombre de séries</Label>
+                        <Label>{i18n.t('workouts.sets')}</Label>
                         <TextInput
                             placeholderTextColor={"white"}
                             style={styles.input}
-                            placeholder="ex : 2"
+                            placeholder={i18n.t('workouts.setsEx')}
                             inputMode='numeric'
                             value={currentExercise.seriesCount}
                             onChangeText={(text) => setCurrentExercise({ ...currentExercise, seriesCount: text })}
                         />
-                        <Label>Repos (en s)</Label>
+                        <Label>{i18n.t('workouts.rest')}</Label>
                         <TextInput
                             placeholderTextColor={"white"}
                             style={styles.input}
-                            placeholder="120 (2min)"
+                            placeholder={i18n.t('workouts.restEx')}
                             inputMode='numeric'
                             value={currentExercise.restTime}
                             onChangeText={(text) => setCurrentExercise({ ...currentExercise, restTime: text })}
@@ -207,7 +208,7 @@ const AddWorkoutScreen: React.FC = ({ route, navigation }: any) => {
                 {!showExerciseForm &&
                     <TouchableOpacity style={styles.addExerciceButton} onPress={handleAddExercice}>
                         <CustomText style={styles.addExerciceButtonText}>
-                            Ajouter exercice
+                            {i18n.t('workouts.addExercice')}
                         </CustomText>
                     </TouchableOpacity>
                 }
@@ -217,7 +218,7 @@ const AddWorkoutScreen: React.FC = ({ route, navigation }: any) => {
             {!showExerciseForm &&
                 <GradientButton style={[styles.button]} colors={['#E235DC', '#a6e']} onPress={handleSaveSession}>
                     <CustomText style={styles.buttonText}>
-                        {workoutData ? "Sauvegarder" : "Ajouter une séance"}
+                        {workoutData ? i18n.t('workouts.save') : i18n.t('workouts.addWorkout')}
                     </CustomText>
                 </GradientButton>
             }

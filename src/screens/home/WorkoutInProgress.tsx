@@ -8,6 +8,7 @@ import { collection, addDoc } from "firebase/firestore";
 import { getData, storeData } from "../../utils/storageHelper";
 import GradientButton from "../../components/global/GradientButton";
 import LoadingScreen from "../global/LoadingScreen";
+import i18n from "../../utils/i18";
 
 type Exercise = {
     name: string;
@@ -32,7 +33,7 @@ const WorkoutInProgress = ({ route, navigation }: { route: any, navigation: any 
 
     const percentages = [0.5, 0.13, 0.13, 0.14];  // 40%, 10%, 50%
     const widthArr = viewWidth ? percentages.map(percentage => viewWidth * percentage) : [];
-    const tableHead = ['Série', 'Reps', 'Ressenti', "Note"];
+    const tableHead = [i18n.t('confirm.exercise'), i18n.t('confirm.reps'), i18n.t('confirm.feeling'), i18n.t('confirm.note')];
     const userId = auth.currentUser?.uid;
 
     useEffect(() => {
@@ -96,7 +97,6 @@ const WorkoutInProgress = ({ route, navigation }: { route: any, navigation: any 
                                 <CustomText style={styles.title}>{exo.name}</CustomText>
                                 <CustomText style={styles.description}>{exo.placement}</CustomText>
                                 <CustomText style={styles.rest}>{secondsToMinutes(Number(exo.restTime))}</CustomText>
-
                                 <View style={styles.row}>
                                     {tableHead.map((headerItem: any, index: any) => (
                                         <Cell
@@ -132,21 +132,19 @@ const WorkoutInProgress = ({ route, navigation }: { route: any, navigation: any 
                                                             const newData = updateData(i, serieIndex, fieldConfig.key, text);
                                                             setWorkoutData(newData);
                                                         }}
-                                                    ></TextInput>
+                                                    />
                                                 }
                                                 width={widthArr[inputIndex + 1]}
                                             />
                                         ))}
                                     </View>
                                 ))}
-
                             </View>
                         ))}
-
                     </Swiper>
 
                     <GradientButton style={styles.button} onPress={() => { saveCompletedWorkout(workoutData) }} colors={['#E235DC', '#a6e',]}>
-                        <CustomText style={styles.buttonText}>Terminer la séance</CustomText>
+                        <CustomText style={styles.buttonText}>{i18n.t('inprogress.end')}</CustomText>
                     </GradientButton >
                 </SafeAreaView >
                 :

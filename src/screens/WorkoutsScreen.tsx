@@ -4,6 +4,7 @@ import CustomText from "../components/global/CustomText";
 import { auth, db } from '../firebase/firebaseconfig';
 import { collection, query, where, getDocs, doc, deleteDoc } from "firebase/firestore"; // Ajoutez doc, deleteDoc ici
 import { Ionicons } from '@expo/vector-icons';
+import i18n from '../utils/i18';
 
 const WorkoutsScreen = ({ navigation }: any) => {
     const [workouts, setWorkouts] = useState<any[]>([]);
@@ -59,7 +60,7 @@ const WorkoutsScreen = ({ navigation }: any) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <CustomText style={styles.title}>Mes séances</CustomText>
+            <CustomText style={styles.title}>{i18n.t("workouts.mine")}</CustomText>
             <FlatList
                 data={workouts}
                 style={styles.workoutsContainer}

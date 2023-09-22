@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import CustomText from '../components/global/CustomText';
 import NavigationBack from "../components/global/BackNavigation"
 import GradientButton from '../components/global/GradientButton';
+import i18n from '../utils/i18';
 
 const TimerScreen = ({ navigation }: any) => {
     const [milliseconds, setMilliseconds] = useState(0);
@@ -37,22 +38,21 @@ const TimerScreen = ({ navigation }: any) => {
 
     return (
         <View style={styles.container}>
-            <CustomText style={styles.title}>Chronomètre</CustomText>
+            <CustomText style={styles.title}>{i18n.t("timer.title")}</CustomText>
             <CustomText style={styles.timerText}>{formatTime(milliseconds)}</CustomText>
-            <View style={{width: "100%"}}>
+            <View style={{ width: "100%" }}>
                 <GradientButton colors={['#E235DC', '#a6e']} onPress={() => setIsActive(!isActive)} style={styles.button}>
-                    <CustomText style={styles.buttonText}>{isActive ? 'Pause' : 'Start'}</CustomText>
+                    <CustomText style={styles.buttonText}>{isActive ? i18n.t("timer.pause") : i18n.t("timer.start")}</CustomText>
                 </GradientButton>
                 {!isActive ?
                     <GradientButton colors={['#E235DC', '#a6e']} onPress={() => setMilliseconds(0)} style={styles.button}>
-                        <CustomText style={styles.buttonText}>Reset</CustomText>
+                        <CustomText style={styles.buttonText}>{i18n.t("timer.reset")}</CustomText>
                     </GradientButton>
                     :
                     <></>}
 
             </View>
             <NavigationBack navigation={navigation} />
-
         </View>
     );
 };
@@ -63,8 +63,9 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         backgroundColor: '#1E1E1E',
-        paddingVertical: 50,
-        paddingHorizontal: 20
+        paddingTop: 100,
+        paddingBottom: 30,
+        paddingHorizontal: 20,
     },
     title: {
         fontSize: 30,

@@ -4,6 +4,7 @@ import CustomText from '../../components/global/CustomText';
 import Swiper from 'react-native-swiper';
 import { Cell } from 'react-native-table-component';
 import NavigationBack from "../../components/global/BackNavigation"
+import i18n from '../../utils/i18';
 
 const WorkoutView = ({ route, navigation }: any) => {
     const workoutDetails = route.params?.workoutDetails;
@@ -25,7 +26,7 @@ const WorkoutView = ({ route, navigation }: any) => {
     if (!exercisesArray) {
         return (
             <SafeAreaView style={styles.container}>
-                <CustomText style={styles.errorText}>Aucune information sur la séance disponible.</CustomText>
+                <CustomText style={styles.errorText}>{i18n.t("workouts.errorFetching")}</CustomText>
             </SafeAreaView>
         );
     }

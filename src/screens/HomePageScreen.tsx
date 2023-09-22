@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView, StyleSheet, View, FlatList, TouchableOpacity, RefreshControl, ScrollView } from "react-native";
 import CustomText from "../components/global/CustomText";
-import { db } from '../firebase/firebaseconfig'; // Assurez-vous que le chemin est correct
-import { collection, getDocs } from 'firebase/firestore';
+import { auth, db } from '../firebase/firebaseconfig'; // Assurez-vous que le chemin est correct
+import { collection, getDocs, query, where } from 'firebase/firestore';
 import { storeData, getData } from '../utils/storageHelper'; // Assurez-vous que le chemin est correct
+import { Ionicons } from '@expo/vector-icons';
+import i18n from '../utils/i18';
 
 const HomePageScreen = ({ navigation }: any) => {
     const [sessions, setSessions] = useState<any[]>([]);
@@ -11,16 +13,24 @@ const HomePageScreen = ({ navigation }: any) => {
 
     const fetchSessions = async () => {
         try {
-            const sessionsRef = collection(db, 'workoutsSchemas'); // Assurez-vous que c'est la bonne collection
-            const sessionsSnapshot = await getDocs(sessionsRef);
+            if (auth.currentUser) {
+                const currentUserId = auth.currentUser.uid; // Récupérez l'ID de l'utilisateur connecté
 
-            const sessionsData = sessionsSnapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data()
-            }));
+                const sessionsRef = collection(db, 'workoutsSchemas'); // Assurez-vous que c'est la bonne collection
 
-            setSessions(sessionsData);
-            storeData('sessions', sessionsData);
+                // Créez une requête pour filtrer les workoutsSchemas en fonction de l'ID de l'utilisateur
+                const filteredQuery = query(sessionsRef, where("userId", "==", currentUserId));
+
+                const sessionsSnapshot = await getDocs(filteredQuery);
+
+                const sessionsData = sessionsSnapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+
+                setSessions(sessionsData);
+                storeData('sessions', sessionsData);
+            }
         } catch (error) {
             console.error("Erreur lors de la récupération des séances:", error);
         }
@@ -56,10 +66,10 @@ const HomePageScreen = ({ navigation }: any) => {
                     />
                 }
             >
-                <CustomText style={styles.title}>Salut, Lenny</CustomText>
+                <CustomText style={styles.title}>{i18n.t("homepage.welcome")}</CustomText>
 
                 <View style={styles.workoutsContainer}>
-                    <CustomText style={styles.containerTitle}>On fait quoi aujourd'hui ?</CustomText>
+                    <CustomText style={styles.containerTitle}>{i18n.t("homepage.todayWorkout")}</CustomText>
 
                     <FlatList
                         data={sessions}
@@ -74,10 +84,13 @@ const HomePageScreen = ({ navigation }: any) => {
                 </View>
 
                 <View style={styles.workoutsContainer}>
-                    <CustomText style={styles.containerTitle}>Ma progression :</CustomText>
-                    <CustomText>Prochainement..</CustomText>
+                    <CustomText style={styles.containerTitle}>{i18n.t("homepage.progress")}</CustomText>
+                    <CustomText>{i18n.t("homepage.soon")}</CustomText>
                 </View>
             </ScrollView>
+            <TouchableOpacity onPress={() => { navigation.navigate("Profile") }} style={styles.settingButton}>
+                <Ionicons name="settings-outline" size={24} color="white" />
+            </TouchableOpacity>
         </SafeAreaView>
     );
 
@@ -112,5 +125,11 @@ const styles = StyleSheet.create({
     },
     workoutsContainer: {
         marginTop: 50
+    },
+    settingButton: {
+        padding: 10,
+        position: 'absolute',
+        top: 50,
+        right: 20
     }
 })

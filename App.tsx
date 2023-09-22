@@ -15,6 +15,7 @@ import WorkoutsScreen from './src/screens/WorkoutsScreen';
 import AddWorkoutScreen from './src/screens/workouts/AddWorkoutScreen';
 import HomePageScreen from './src/screens/HomePageScreen';
 import TimerScreen from './src/screens/TimerScreen';
+import ProfileScreen from './src/screens/ProfileScreen';
 import WorkoutViewScreen from './src/screens/workouts/WorkoutView';
 import ConfirmWorkoutScreen from './src/screens/home/ConfirmWorkoutScreen';
 import WorkoutInProgress from './src/screens/home/WorkoutInProgress';
@@ -39,6 +40,7 @@ function HomeScreenStackNavigator() {
       <HomeScreenStack.Screen name="HomePage" component={HomePageScreen} />
       <HomeScreenStack.Screen name="ConfirmWorkout" component={ConfirmWorkoutScreen} />
       <HomeScreenStack.Screen name="WorkoutInProgress" component={WorkoutInProgress} />
+      <HomeScreenStack.Screen name="Profile" component={ProfileScreen} />
     </HomeScreenStack.Navigator>
   );
 }
@@ -112,7 +114,7 @@ const App = () => {
           initialRouteName='Landing'
         >
           <AuthStack.Screen name="Landing" component={LandingScreen} />
-          <AuthStack.Screen name="Login" component={LoginScreen} />
+          <AuthStack.Screen name="Login" component={LoginScreen}  />
           <AuthStack.Screen name="SignUp" component={SignUpScreen} />
         </AuthStack.Navigator>
       )}

@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, Text } from "react-native";
+import { Linking, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import CustomText from "../components/global/CustomText";
 import GradientButton from "../components/global/GradientButton"
 import { logout } from "../firebase/firebaseconfig";
@@ -9,9 +9,14 @@ const Profile = ({ navigation }: any) => {
     return (
         <SafeAreaView style={styles.container}>
             <CustomText style={styles.title}>Profile</CustomText>
-            <GradientButton style={styles.button} colors={['#E235DC', '#a6e',]} onPress={logout}>
-                <CustomText style={styles.buttonText}>{i18n.t("profile.disconnect")}</CustomText>
-            </GradientButton>
+            <View>
+                <GradientButton style={styles.button} colors={['#E235DC', '#a6e',]} onPress={logout}>
+                    <CustomText style={styles.buttonText}>{i18n.t("profile.disconnect")}</CustomText>
+                </GradientButton>
+                <TouchableOpacity onPress={() => { Linking.openURL('https://www.perfx.lennyroland.com/privacy-policy') }}>
+                    <CustomText style={{textAlign: 'center'}}>CGU</CustomText>
+                </TouchableOpacity>
+            </View>
             <NavigationBack navigation={navigation} />
         </SafeAreaView>
     )

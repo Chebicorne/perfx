@@ -14,7 +14,7 @@ const WorkoutView = ({ route, navigation }: any) => {
 
     const [viewWidth, setViewWidth] = useState<number>(0);
 
-    const tableHead = ['Série', 'Reps', 'Ressenti', "Note"];
+    const tableHead = ['Série', 'Reps', 'Poids', "Note"];
     const percentages = [0.5, 0.13, 0.13, 0.14];  // 40%, 10%, 50%
     const widthArr = viewWidth ? percentages.map(percentage => viewWidth * percentage) : [];
     const fieldsConfig = [

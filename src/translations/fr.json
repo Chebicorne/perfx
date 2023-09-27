@@ -28,7 +28,8 @@
         "rest": "Repos",
         "start": "Démarrer",
         "note": "Note",
-        "feeling": "Ressenti"
+        "feeling": "Ressenti",
+        "weight": "Poids"
     },
     "inprogress": {
         "end": "Terminer la séance"

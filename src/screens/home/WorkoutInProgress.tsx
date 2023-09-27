@@ -33,7 +33,7 @@ const WorkoutInProgress = ({ route, navigation }: { route: any, navigation: any 
 
     const percentages = [0.5, 0.13, 0.13, 0.14];  // 40%, 10%, 50%
     const widthArr = viewWidth ? percentages.map(percentage => viewWidth * percentage) : [];
-    const tableHead = [i18n.t('confirm.exercise'), i18n.t('confirm.reps'), i18n.t('confirm.feeling'), i18n.t('confirm.note')];
+    const tableHead = [i18n.t('confirm.exercise'), i18n.t('confirm.reps'), i18n.t('confirm.weight'), i18n.t('confirm.note')];
     const userId = auth.currentUser?.uid;
 
     useEffect(() => {

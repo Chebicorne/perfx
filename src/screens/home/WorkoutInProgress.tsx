@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, SafeAreaView, StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 import CustomText from '../../components/global/CustomText'
 import Swiper from 'react-native-swiper'
 import { useEffect, useState } from "react";
@@ -35,7 +35,7 @@ const WorkoutInProgress = ({ route, navigation }: { route: any, navigation: any 
     const widthArr = viewWidth ? percentages.map(percentage => viewWidth * percentage) : [];
     const tableHead = [i18n.t('confirm.exercise'), i18n.t('confirm.reps'), i18n.t('confirm.weight'), i18n.t('confirm.note')];
     const userId = auth.currentUser?.uid;
-
+    const [isEditing, setIsEditing] = useState(false)
     useEffect(() => {
         if (session && session.exercises) {
             setExercises(session.exercises);
@@ -87,6 +87,22 @@ const WorkoutInProgress = ({ route, navigation }: { route: any, navigation: any 
         }
     };
 
+    const confirmEndWorkout = () => {
+        Alert.alert(
+            "Terminer la séance",
+            "Vosu ne pourrez plus modifier ou changer le contenu de celle-ci",
+            [
+                {
+                    text: "Annuler",
+                    onPress: () => console.log("Annulé"),
+                    style: "cancel"
+                },
+                { text: "Confirmer", onPress: () => saveCompletedWorkout(workoutData) }
+            ],
+            { cancelable: false }
+        );
+    };
+
     return (
         <>
             {!loading ?
@@ -125,6 +141,8 @@ const WorkoutInProgress = ({ route, navigation }: { route: any, navigation: any 
                                                 key={fieldConfig.key}
                                                 data={
                                                     <TextInput
+                                                        onFocus={() => setIsEditing(true)}
+                                                        onBlur={() => setIsEditing(false)}
                                                         style={styles.input}
                                                         placeholderTextColor={"white"}
                                                         keyboardType={fieldConfig.type === "number" ? "numeric" : "default"}
@@ -141,11 +159,13 @@ const WorkoutInProgress = ({ route, navigation }: { route: any, navigation: any 
                                 ))}
                             </View>
                         ))}
-                    </Swiper>
 
-                    <GradientButton style={styles.button} onPress={() => { saveCompletedWorkout(workoutData) }} colors={['#E235DC', '#a6e',]}>
-                        <CustomText style={styles.buttonText}>{i18n.t('inprogress.end')}</CustomText>
-                    </GradientButton >
+                    </Swiper>
+                    {!isEditing && (
+                        <GradientButton style={styles.button} onPress={confirmEndWorkout} colors={['#E235DC', '#a6e',]}>
+                            <CustomText style={styles.buttonText}>{i18n.t('inprogress.end')}</CustomText>
+                        </GradientButton >
+                    )}
                 </SafeAreaView >
                 :
                 <LoadingScreen />
